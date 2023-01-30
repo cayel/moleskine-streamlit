@@ -20,7 +20,7 @@ if not firebase_admin._apps:
 		"databaseURL": st.secrets.databaseURL
 		})
 
-ref = db.reference("/movies/WvoUD4aZEoQpCoBeBr7Lm6jlNcE2")
+ref = db.reference("/movies/CKTlQvlnkJZhqagNIls2arTxKxp2")
 
 snapshot = ref.get()
 
