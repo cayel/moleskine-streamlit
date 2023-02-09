@@ -1,1 +1,2 @@
 firebase_admin
+protobuf==4.21.6
