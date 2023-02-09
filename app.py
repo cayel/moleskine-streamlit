@@ -2,7 +2,6 @@ import streamlit as st
 import firebase_admin 
 from firebase_admin import db
 import pandas
-import toml
 
 #configuration of the page
 st.set_page_config(layout="wide")
@@ -21,43 +20,44 @@ if not firebase_admin._apps:
 		})
 
 ref_path = "/movies/"+st.secrets.user_id
-print(ref_path)
 ref = db.reference(ref_path)
 
+# Load all movies in dataframe
 snapshot = ref.get()
-
 df=pandas.DataFrame(snapshot.items())
 df.columns = ['_id', '_object']
-print(df)
 
 df1 = pandas.DataFrame([x for x in df['_object']]).join(df['_id'])
 df1 = df1.sort_index(1)
+
 def convert_date_firebase(date):
     return pandas.Timestamp(date, unit='ms').year
 
-df1['date'] = df1['date'].apply(convert_date_firebase)
-print(df1)
+df1['years'] = df1['date'].apply(convert_date_firebase)
+f1 = df1.sort_values(by='date', ascending=False)
 
 st.title('Moleskine')
-st.markdown("""
-Cette application analyse les films regardés au cours des dernières années
-""")
+st.subheader('Les 10 derniers films vus')
 
-#st.dataframe(df1[['cinema','title','director','rating','date']])
+#st.dataframe(df1[['title','director']])
+for i, j in df1.iterrows():
+	str_cinema = ''
+	if (j['cinema']):
+		str_cinema=':cinema:'
+	st.markdown(j['title']+' ('+j['director']+')'+str_cinema)
 
-st.sidebar.header('Select what to display')
-directors = df1['director'].unique().tolist()
-directors_selected = st.sidebar.multiselect('Réalisateurs', directors, directors)
+#st.sidebar.header('Filtrer')
+#years = df1['date'].unique().tolist()
+#years_selected = st.sidebar.multiselect('Années', years, years)
 
 #selected_years = st.sidebar.slider("Années", 2009, 2025, (2023, 2023))
 
 #creates masks from the sidebar selection widgets
-mask_directors = df1['director'].isin(directors_selected)
+#mask_years = df1['director'].isin(years_selected)
 
-df_movies_filtered = df1[mask_directors]
-st.write(df_movies_filtered)
+#df_movies_filtered = df1[mask_years]
+#st.write(df_movies_filtered)
 
-df2 = df1.groupby(['date'])['date'].count().reset_index(name='count')
-st.bar_chart(df2,x='date',y='count')
-
+#df2 = df1.groupby(['date'])['date'].count().reset_index(name='count')
+#st.bar_chart(df2,x='date',y='count')
 
