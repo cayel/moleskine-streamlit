@@ -28,7 +28,6 @@ df=pandas.DataFrame(snapshot.items())
 df.columns = ['_id', '_object']
 
 df1 = pandas.DataFrame([x for x in df['_object']]).join(df['_id'])
-df1 = df1.sort_index(1)
 
 def convert_date_firebase(date):
     return pandas.Timestamp(date, unit='ms').year
