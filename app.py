@@ -33,18 +33,21 @@ def convert_date_firebase(date):
     return pandas.Timestamp(date, unit='ms').year
 
 df1['years'] = df1['date'].apply(convert_date_firebase)
-f1 = df1.sort_values(by='date', ascending=False)
+f1 = df1.sort_values(by='date', ascending=True)
 
 st.title('Moleskine')
 st.subheader('Les 10 derniers films vus')
 
 #st.dataframe(df1[['title','director']])
+count = 0
 for i, j in df1.iterrows():
+	count = count+1
 	str_cinema = ''
-	if (j['cinema']):
+	if (j['cinema'] == True):
 		str_cinema=':cinema:'
 	st.markdown(j['title']+' ('+j['director']+')'+str_cinema)
-
+	if (count == 10):
+		break
 #st.sidebar.header('Filtrer')
 #years = df1['date'].unique().tolist()
 #years_selected = st.sidebar.multiselect('Années', years, years)
