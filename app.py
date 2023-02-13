@@ -45,7 +45,7 @@ for i, j in df1.iterrows():
 	str_cinema = ''
 	if (j['cinema'] == True):
 		str_cinema=':cinema:'
-	st.markdown(j['title']+' ('+j['director']+')'+str_cinema)
+	st.markdown('- '+j['title']+' ('+j['director']+')'+str_cinema)
 	if (count == 10):
 		break
 #st.sidebar.header('Filtrer')
