@@ -33,7 +33,7 @@ def convert_date_firebase(date):
     return pandas.Timestamp(date, unit='ms').year
 
 df1['years'] = df1['date'].apply(convert_date_firebase)
-f1 = df1.sort_values(by='date', ascending=False)
+df1 = df1.sort_values(by='date', ascending=False)
 
 st.title('Moleskine')
 st.subheader('Les 10 derniers films vus')
